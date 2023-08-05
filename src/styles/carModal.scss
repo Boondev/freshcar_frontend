@@ -1,0 +1,77 @@
+@import '@/styles/base.scss';
+
+
+.car-modal{
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: $modalBgColor;
+	z-index: 100;
+	
+	.car-modal-container{
+		width: 700px;
+		height: 400px;
+		padding: 20px 30px;
+		display: flex;
+		flex-direction: column;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%,-50%);
+		background-color: $scbgColor;
+		border-radius: 15px;
+
+		.close-btn{
+			width: 20px;
+			position: absolute;
+			top: 10px;
+			right: 10px;
+		}
+
+		.car-title{
+			padding-bottom: 10px;
+			margin-bottom: 5px;
+			font-size: 16px;
+			font-weight: bold;
+			border-bottom: 1px solid grey;
+		}
+
+		.car-modal-content{
+			padding: 15px 0;
+			position: relative;
+			flex: 1;
+
+			.el-form{
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				column-gap: 30px;
+
+				.el-form-item{
+					display: block;
+					margin-bottom: 10px;
+
+					label{
+						display: block;
+						color: $labelFontColor;
+					}
+
+					.el-select,.el-input{
+						width: 100%;
+					}
+
+					.el-button{
+						padding: 18px;
+						width: 100px;
+					}
+					&:last-child{
+						position: absolute;
+						bottom: 0;
+						right: 0;
+					}
+				}
+			}
+		}
+	}
+}

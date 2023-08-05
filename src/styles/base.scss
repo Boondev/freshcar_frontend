@@ -1,0 +1,14 @@
+$bgColor:#dadcdf;
+$scbgColor:white;
+$fontColor:#121139;
+$labelFontColor:#72727b;
+$modalBgColor:rgba(33, 33, 33, 0.605);
+
+body{
+  position: relative;
+  margin: 0;
+  background-color: $bgColor;
+  color: $fontColor;
+  font-size: 12px;
+  font-family: Helvetica Neue,Helvetica,Arial,sans-serif; 
+}
