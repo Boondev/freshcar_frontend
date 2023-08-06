@@ -10,7 +10,7 @@
 					</el-form-item>
 					
 					<el-form-item label="Colour">
-						<el-select v-model="curCar.colourId" filterable :append-to-body="false" >
+						<el-select v-model="curCar.colourId" filterable :append-to-body="false" allow-create>
 							<el-option
 								v-for="item in colorList"
 								:key="item.id"
@@ -20,7 +20,7 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="Propellant">
-						<el-select v-model="curCar.propellantId" filterable :append-to-body="false" >
+						<el-select v-model="curCar.propellantId" filterable :append-to-body="false" allow-create>
 							<el-option
 								v-for="item in propellantList"
 								:key="item.id"
@@ -31,6 +31,16 @@
 					</el-form-item>
 					<el-form-item label="Seats">
 						<el-input v-model="curCar.seats" type="number" />
+					</el-form-item>
+					<el-form-item label="Company">
+						<el-select v-model="curCar.companyId" filterable :append-to-body="false" allow-create>
+							<el-option
+								v-for="item in companyList"
+								:key="item.id"
+								:label="item.label"
+								:value="item.id"
+							/>
+						</el-select>
 					</el-form-item>
 					<el-form-item label="Expiry Date">
 						<el-date-picker
@@ -60,6 +70,7 @@ export default {
 		
 		const colorList=ref([{id:1,label:'black'},{id:2,label:'silver'},{id:3,label:'blue'}]);
 		const propellantList=ref([{id:1,label:'hybrid'},{id:2,label:'petrol'},{id:3,label:'electric'}]);
+		const companyList=ref([{id:1,label:'Sky Rentals'},{id:2,label:'Forever Blue Pte Ltd'},{id:3,label:'Reimagined Inc'}]);
 		
 		// function getColor(){
 
@@ -73,13 +84,6 @@ export default {
 		// 	getColor();
 		// 	getPropellant();
 		// });
-		const canEdit=reactive({
-			carPlate:false,
-			colour:false,
-			propellant:false,
-			seats:false,
-			expiryDate:false
-		});
 
 		const curCar=reactive({
 			carPlate:"",
@@ -88,7 +92,6 @@ export default {
 			seats:null,
 			expiryDate:'',
 			companyId:1,
-			companyName:'Forever Blue Pte Ltd'
 		});
 
 		function onSubmit(){
@@ -102,7 +105,7 @@ export default {
 			curCar,
 			colorList,
 			propellantList,
-			canEdit,
+			companyList,
 
 			onSubmit,
 			closeModal

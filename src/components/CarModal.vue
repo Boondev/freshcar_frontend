@@ -14,7 +14,7 @@
 					<el-form-item label="Colour">
 						<img src="@/assets/img/edit.svg" alt="" class="edit-btn" v-if="canEdit.colour==false" @click="edit('colour')">
 						<img src="@/assets/img/save.svg" alt="" class="save-btn" v-else @click="save('colour')">
-						<el-select v-model="curCar.colourId" filterable :append-to-body="false" :disabled="canEdit.colour==false">
+						<el-select v-model="curCar.colourId" filterable :append-to-body="false" :disabled="canEdit.colour==false" allow-create>
 							<el-option
 								v-for="item in colorList"
 								:key="item.id"
@@ -26,7 +26,7 @@
 					<el-form-item label="Propellant">
 						<img src="@/assets/img/edit.svg" alt="" class="edit-btn" v-if="canEdit.propellant==false" @click="edit('propellant')">
 						<img src="@/assets/img/save.svg" alt="" class="save-btn" v-else @click="save('propellant')">
-						<el-select v-model="curCar.propellantId" filterable :append-to-body="false" :disabled="canEdit.propellant==false">
+						<el-select v-model="curCar.propellantId" filterable :append-to-body="false" :disabled="canEdit.propellant==false" allow-create>
 							<el-option
 								v-for="item in propellantList"
 								:key="item.id"
