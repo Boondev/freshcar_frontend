@@ -6,11 +6,15 @@
 			<div class="car-modal-content">
 				<el-form v-model="curCar">
 					<el-form-item label="Car Plate">
-						<el-input v-model="curCar.carPlate" />
+						<img src="@/assets/img/edit.svg" alt="" class="edit-btn" v-if="canEdit.carPlate==false" @click="edit('carPlate')">
+						<img src="@/assets/img/save.svg" alt="" class="save-btn" v-else @click="save('carPlate')">
+						<el-input v-model="curCar.carPlate" :disabled="canEdit.carPlate==false"/>
 					</el-form-item>
 					
 					<el-form-item label="Colour">
-						<el-select v-model="curCar.colourId" filterable :append-to-body="false" >
+						<img src="@/assets/img/edit.svg" alt="" class="edit-btn" v-if="canEdit.colour==false" @click="edit('colour')">
+						<img src="@/assets/img/save.svg" alt="" class="save-btn" v-else @click="save('colour')">
+						<el-select v-model="curCar.colourId" filterable :append-to-body="false" :disabled="canEdit.colour==false">
 							<el-option
 								v-for="item in colorList"
 								:key="item.id"
@@ -20,7 +24,9 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="Propellant">
-						<el-select v-model="curCar.propellantId" filterable :append-to-body="false">
+						<img src="@/assets/img/edit.svg" alt="" class="edit-btn" v-if="canEdit.propellant==false" @click="edit('propellant')">
+						<img src="@/assets/img/save.svg" alt="" class="save-btn" v-else @click="save('propellant')">
+						<el-select v-model="curCar.propellantId" filterable :append-to-body="false" :disabled="canEdit.propellant==false">
 							<el-option
 								v-for="item in propellantList"
 								:key="item.id"
@@ -30,19 +36,24 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="Seats">
-						<el-input v-model="curCar.seats" type="number"/>
+						<img src="@/assets/img/edit.svg" alt="" class="edit-btn" v-if="canEdit.seats==false" @click="edit('seats')">
+						<img src="@/assets/img/save.svg" alt="" class="save-btn" v-else @click="save('seats')">
+						<el-input v-model="curCar.seats" type="number" :disabled="canEdit.seats==false"/>
 					</el-form-item>
-					<el-form-item label="Seats">
+					<el-form-item label="Expiry Date">
+						<img src="@/assets/img/edit.svg" alt="" class="edit-btn" v-if="canEdit.expiryDate==false" @click="edit('expiryDate')">
+						<img src="@/assets/img/save.svg" alt="" class="save-btn" v-else @click="save('expiryDate')">
 						<el-date-picker
 							v-model="curCar.expiryDate"
 							type="date"
 							placeholder="Expiry Date"
 							:size="'default'"
 							:append-to-body="false"
+							:disabled="canEdit.expiryDate==false"
 						/>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="onSubmit">Edit</el-button>
+						<el-button type="primary" @click="onSubmit">Submit</el-button>
 						<el-button @click="closeModal">Cancel</el-button>
 					</el-form-item>
 				</el-form>
@@ -73,6 +84,21 @@ export default {
 		// 	getColor();
 		// 	getPropellant();
 		// });
+		const canEdit=reactive({
+			carPlate:false,
+			colour:false,
+			propellant:false,
+			seats:false,
+			expiryDate:false
+		});
+
+		function edit(field){
+			canEdit[field]=true;
+		}
+
+		function save(field){
+			canEdit[field]=false;
+		}
 
 		const curCar=reactive({
 			carPlate:"SRH9547K",
@@ -88,6 +114,7 @@ export default {
 
 		function onSubmit(){
 			console.log('onsubmit')
+			closeModal();
 		}
 		
 		function closeModal(){
@@ -97,9 +124,12 @@ export default {
 			curCar,
 			colorList,
 			propellantList,
+			canEdit,
 
+			edit,
+			save,
 			onSubmit,
-			closeModal
+			closeModal,
 		}
 	}
 }

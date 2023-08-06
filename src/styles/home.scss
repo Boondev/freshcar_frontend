@@ -15,7 +15,12 @@
 	.filter{
 		display: flex;
 		column-gap: 10px;
+
+		.el-button+.el-button {
+			margin-left: 0;
+		}
 	}
+
 	.car-list{
 		width: 1200px;
 		padding: 20px;

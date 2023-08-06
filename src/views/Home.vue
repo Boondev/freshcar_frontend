@@ -17,26 +17,29 @@
         :append-to-body="false"
       />
       <el-button @click="search">
-      Search
+        Search
+      </el-button>
+      <el-button @click="openAddModal">
+        Add New Car
       </el-button>
     </div>
     <div class="car-list">
       <el-table :data="carList" style="width: 100%">
-      <el-table-column prop="carPlate" label="Car Plate"/>
-      <el-table-column prop="colourLabel" label="Colour" />
-      <el-table-column prop="propellantLabel" label="Propellant" />
-      <el-table-column prop="seats" label="Seats" />
-      <el-table-column prop="companyName" label="Company Name" />
-      <el-table-column prop="expiryDate" label="Expiry Date" />
-      <el-table-column label="Action">
-          <template #default="scope">
-            <el-button @click="openEditModal(scope)">Edit</el-button>
-          </template>
-      </el-table-column>
-    </el-table>
+        <el-table-column prop="carPlate" label="Car Plate"/>
+        <el-table-column prop="colourLabel" label="Colour" />
+        <el-table-column prop="propellantLabel" label="Propellant" />
+        <el-table-column prop="seats" label="Seats" />
+        <el-table-column prop="companyName" label="Company Name" />
+        <el-table-column prop="expiryDate" label="Expiry Date" />
+        <el-table-column label="Action">
+            <template #default="scope">
+              <el-button @click="openEditModal(scope)">Edit</el-button>
+            </template>
+        </el-table-column>
+      </el-table>
     </div>
     <CarModal @close-modal="closeEditModal" v-show="isEditModal"/>
-
+    <AddCarModal @close-modal="closeAddModal" v-show="isAddModal"/>
   </div>
 </template>
 
@@ -44,11 +47,13 @@
 import store from '@/store';
 import { ref } from 'vue'
 import CarModal from '@/components/CarModal';
+import AddCarModal from '@/components/AddCarModal';
 
 export default {
   name:'Home',
   components:{
-    CarModal
+    CarModal,
+    AddCarModal
   },
   setup () {
     const size = ref('default')
@@ -109,6 +114,18 @@ export default {
 
     function closeEditModal(){
       isEditModal.value=false;
+      search();
+    }
+
+    const isAddModal=ref(false);
+
+    function openAddModal(){
+      isAddModal.value=true;
+    }
+
+    function closeAddModal(){
+      isAddModal.value=false;
+      search();
     }
 
     return{
@@ -118,10 +135,13 @@ export default {
       endDate,
       carList,
       isEditModal,
+      isAddModal,
       
       search,
       openEditModal,
-      closeEditModal
+      closeEditModal,
+      openAddModal,
+      closeAddModal
     }
   }
 }

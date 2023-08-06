@@ -28,6 +28,7 @@
 			position: absolute;
 			top: 10px;
 			right: 10px;
+			cursor: pointer;
 		}
 
 		.car-title{
@@ -49,12 +50,22 @@
 				column-gap: 30px;
 
 				.el-form-item{
-					display: block;
 					margin-bottom: 10px;
+					display: block;
+					position: relative;
 
 					label{
 						display: block;
 						color: $labelFontColor;
+					}
+
+					.save-btn,.edit-btn{
+						position: absolute;
+						right: 0;
+						top: -20px;
+						z-index: 999;
+						width: 16px;
+						cursor: pointer;
 					}
 
 					.el-select,.el-input{
@@ -65,6 +76,7 @@
 						padding: 18px;
 						width: 100px;
 					}
+
 					&:last-child{
 						position: absolute;
 						bottom: 0;
