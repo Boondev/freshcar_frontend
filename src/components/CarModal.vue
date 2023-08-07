@@ -6,17 +6,17 @@
 			<div class="car-modal-content">
 				<el-form v-model="curCar">
 					<el-form-item label="Car Plate">
-						<img src="@/assets/img/edit.svg" alt="" class="edit-btn" v-if="canEdit.carPlate==false" @click="edit('carPlate')">
-						<img src="@/assets/img/save.svg" alt="" class="save-btn" v-else @click="save('carPlate')">
-						<el-input v-model="curCar.carPlate" :disabled="canEdit.carPlate==false"/>
+						<!-- <img src="@/assets/img/edit.svg" alt="" class="edit-btn" v-if="canEdit.car_plate==false" @click="edit('car_plate')">
+						<img src="@/assets/img/save.svg" alt="" class="save-btn" v-else @click="save('car_plate')"> -->
+						<el-input v-model="curCar.car_plate" :disabled="canEdit.car_plate==false"/>
 					</el-form-item>
 					
 					<el-form-item label="Colour">
-						<img src="@/assets/img/edit.svg" alt="" class="edit-btn" v-if="canEdit.colour==false" @click="edit('colour')">
-						<img src="@/assets/img/save.svg" alt="" class="save-btn" v-else @click="save('colour')">
-						<el-select v-model="curCar.colourId" filterable :append-to-body="false" :disabled="canEdit.colour==false" allow-create>
+						<img src="@/assets/img/edit.svg" alt="" class="edit-btn" v-if="canEdit.colour_id==false" @click="edit('colour_id')">
+						<img src="@/assets/img/save.svg" alt="" class="save-btn" v-else @click="save('colour_id')">
+						<el-select v-model="curCar.colour_id" filterable :append-to-body="false" :disabled="canEdit.colour_id==false" allow-create>
 							<el-option
-								v-for="item in colorList"
+								v-for="item in coloursList"
 								:key="item.id"
 								:label="item.label"
 								:value="item.id"
@@ -24,11 +24,12 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="Propellant">
-						<img src="@/assets/img/edit.svg" alt="" class="edit-btn" v-if="canEdit.propellant==false" @click="edit('propellant')">
-						<img src="@/assets/img/save.svg" alt="" class="save-btn" v-else @click="save('propellant')">
-						<el-select v-model="curCar.propellantId" filterable :append-to-body="false" :disabled="canEdit.propellant==false" allow-create>
+						<img src="@/assets/img/edit.svg" alt="" class="edit-btn" v-if="canEdit.propellant_id==false" @click="edit('propellant_id')">
+						<img src="@/assets/img/save.svg" alt="" class="save-btn" v-else @click="save('propellant_id')">
+						<el-select v-model="curCar.propellant_id" filterable :append-to-body="false" :disabled="canEdit.propellant_id==false" allow-create>
 							<el-option
-								v-for="item in propellantList"
+								v-for="item in propellantsList
+"
 								:key="item.id"
 								:label="item.label"
 								:value="item.id"
@@ -41,15 +42,15 @@
 						<el-input v-model="curCar.seats" type="number" :disabled="canEdit.seats==false"/>
 					</el-form-item>
 					<el-form-item label="Expiry Date">
-						<img src="@/assets/img/edit.svg" alt="" class="edit-btn" v-if="canEdit.expiryDate==false" @click="edit('expiryDate')">
-						<img src="@/assets/img/save.svg" alt="" class="save-btn" v-else @click="save('expiryDate')">
+						<img src="@/assets/img/edit.svg" alt="" class="edit-btn" v-if="canEdit.expiry_date==false" @click="edit('expiry_date')">
+						<img src="@/assets/img/save.svg" alt="" class="save-btn" v-else @click="save('expiry_date')">
 						<el-date-picker
-							v-model="curCar.expiryDate"
+							v-model="curCar.expiry_date"
 							type="date"
 							placeholder="Expiry Date"
 							:size="'default'"
 							:append-to-body="false"
-							:disabled="canEdit.expiryDate==false"
+							:disabled="canEdit.expiry_date==false"
 						/>
 					</el-form-item>
 					<el-form-item>
@@ -63,37 +64,59 @@
 </template>
 
 <script>
-import { reactive, ref } from 'vue';
+import { reactive, ref, onMounted} from 'vue';
+import {getGeneralData, updateCar} from '@/api/index';
+import {errorMsg ,successMsg} from '@/utils/index';
 
 export default {
 	name:"CarModal",
+	props:['selectedCar'],
 	setup (props,{emit}) {
 		
-		const colorList=ref([{id:1,label:'black'},{id:2,label:'silver'},{id:3,label:'blue'}]);
-		const propellantList=ref([{id:1,label:'hybrid'},{id:2,label:'petrol'},{id:3,label:'electric'}]);
-		
-		// function getColor(){
+		const coloursList=ref([]);
+		const propellantsList=ref([]);
+		const companiesList=ref([]);
 
-		// }
+		onMounted(() => {
+			getGeneralData().then((data)=>{
+				if(data.status==true){
+					let temp=data.data;
+					coloursList.value=temp.coloursList;
+					propellantsList.value=temp.propellantsList;
+					companiesList.value=temp.companiesList;
+				}else{
+					errorMsg(data.message??'get general data error');
+				}
+			}).catch((e)=>{
+				errorMsg(e??'get general data error');
+			});
 
-		// function getPropellant(){
-
-		// }
-
-		// onMounted(() => {
-		// 	getColor();
-		// 	getPropellant();
-		// });
-		const canEdit=reactive({
-			carPlate:false,
-			colour:false,
-			propellant:false,
-			seats:false,
-			expiryDate:false
+			init()
 		});
+
+		function init(){
+			curCar.car_plate=props.selectedCar.car_plate;
+			curCar.colour_id=props.selectedCar.colour_id;
+			curCar.propellant_id=props.selectedCar.propellant_id;
+			curCar.seats=props.selectedCar.seats;
+			curCar.expiry_date=props.selectedCar.expiry_date;
+		}
+
+		const canEdit=reactive({
+			car_plate:false,
+			colour_id:false,
+			propellant_id:false,
+			seats:false,
+			expiry_date:false
+		});
+
+		const fieldChanges=ref([]);
 
 		function edit(field){
 			canEdit[field]=true;
+			if(!fieldChanges.value.includes(field))
+				fieldChanges.value.push(field);
+			console.log(fieldChanges);
 		}
 
 		function save(field){
@@ -101,29 +124,50 @@ export default {
 		}
 
 		const curCar=reactive({
-			carPlate:"SRH9547K",
-			colourId:1,
-			colourLabel:'black',
-			propellantId:1,
-			propellantLabel:"hybrid",
-			seats:5,
-			expiryDate:'16-Jul-24',
-			companyId:1,
-			companyName:'Forever Blue Pte Ltd'
+			car_plate:"",
+			colour_id:null,
+			propellant_id:null,
+			seats:null,
+			expiry_date:null,
+			company_id:null,
 		});
 
 		function onSubmit(){
-			console.log('onsubmit')
-			closeModal();
+			let params={
+				car_plate:curCar.car_plate,
+			};
+
+			if(fieldChanges.value.length>0){
+				fieldChanges.value.forEach((val)=>{
+					params[val]=curCar[val];
+				});
+				params['fields']=fieldChanges.value;
+			}
+
+			updateCar(params).then((data)=>{
+				console.log(data);
+				if(data.status==true){
+					successMsg(curCar.car_plate+' has been added');
+					closeModal();
+				}else{
+					errorMsg(data.message??'get general data error');
+				}
+			}).catch((e)=>{
+				console.log('error'+e);
+				// errorMsg(e.message??'get general data error');
+			});
 		}
 		
 		function closeModal(){
 			emit('closeModal');
 		}
+
+
 		return {
 			curCar,
-			colorList,
-			propellantList,
+			coloursList,
+			propellantsList
+,
 			canEdit,
 
 			edit,

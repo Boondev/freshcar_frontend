@@ -12,7 +12,7 @@
 					<el-form-item label="Colour">
 						<el-select v-model="curCar.colourId" filterable :append-to-body="false" allow-create>
 							<el-option
-								v-for="item in colorList"
+								v-for="item in coloursList"
 								:key="item.id"
 								:label="item.label"
 								:value="item.id"
@@ -22,7 +22,7 @@
 					<el-form-item label="Propellant">
 						<el-select v-model="curCar.propellantId" filterable :append-to-body="false" allow-create>
 							<el-option
-								v-for="item in propellantList"
+								v-for="item in propellantsList"
 								:key="item.id"
 								:label="item.label"
 								:value="item.id"
@@ -35,9 +35,9 @@
 					<el-form-item label="Company">
 						<el-select v-model="curCar.companyId" filterable :append-to-body="false" allow-create>
 							<el-option
-								v-for="item in companyList"
+								v-for="item in companiesList"
 								:key="item.id"
-								:label="item.label"
+								:label="item.name"
 								:value="item.id"
 							/>
 						</el-select>
@@ -62,28 +62,32 @@
 </template>
 
 <script>
-import { reactive, ref } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
+import {getGeneralData, addCar} from '@/api/index';
+import {errorMsg,successMsg} from '@/utils/index';
 
 export default {
 	name:"AddCarModal",
 	setup (props,{emit}) {
 		
-		const colorList=ref([{id:1,label:'black'},{id:2,label:'silver'},{id:3,label:'blue'}]);
-		const propellantList=ref([{id:1,label:'hybrid'},{id:2,label:'petrol'},{id:3,label:'electric'}]);
-		const companyList=ref([{id:1,label:'Sky Rentals'},{id:2,label:'Forever Blue Pte Ltd'},{id:3,label:'Reimagined Inc'}]);
-		
-		// function getColor(){
+		const coloursList=ref([]);
+		const propellantsList=ref([]);
+		const companiesList=ref([]);
 
-		// }
-
-		// function getPropellant(){
-
-		// }
-
-		// onMounted(() => {
-		// 	getColor();
-		// 	getPropellant();
-		// });
+		onMounted(() => {
+			getGeneralData().then((data)=>{
+				if(data.status==true){
+					let temp=data.data;
+					coloursList.value=temp.coloursList;
+					propellantsList.value=temp.propellantsList;
+					companiesList.value=temp.companiesList;
+				}else{
+					errorMsg(data.message??'get general data error');
+				}
+			}).catch((e)=>{
+				errorMsg(e??'get general data error');
+			});
+		});
 
 		const curCar=reactive({
 			carPlate:"",
@@ -95,20 +99,47 @@ export default {
 		});
 
 		function onSubmit(){
-			console.log('onsubmit')
+			// console.log('onsubmit');
+			let params={
+				car_plate:curCar.carPlate,
+				colour_id:curCar.colourId,
+				company_id:curCar.companyId,
+				propellant_id:curCar.propellantId,
+				seats:curCar.seats,
+				expiry_date:curCar.expiryDate,
+			}
+			addCar(params).then((data)=>{
+				console.log(data);
+				if(data.status==true){
+					successMsg(curCar.carPlate+' has been added');
+					closeModal();
+				}else{
+
+					let msg='';
+					Object.values(data.message).forEach(val=>{
+						msg+=val+"<br>";
+					});
+					// console.log(msg);
+					errorMsg(data.message?msg:'get general data error');
+				}
+			}).catch((e)=>{
+				console.log('error'+e);
+				// errorMsg(e.message??'get general data error');
+			});
 		}
 		
 		function closeModal(){
 			emit('closeModal');
 		}
+
 		return {
 			curCar,
-			colorList,
-			propellantList,
-			companyList,
+			coloursList,
+			propellantsList,
+			companiesList,
 
 			onSubmit,
-			closeModal
+			closeModal,
 		}
 	}
 }

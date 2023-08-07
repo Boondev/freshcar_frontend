@@ -1,6 +1,8 @@
 @import '@/styles/base.scss';
 
 .home{
+	width: 1200px;
+	margin: auto;
 	padding: 20px;
 	display: flex;
 	flex-direction: column;
@@ -11,21 +13,49 @@
 		font-size: 16px;
 		font-weight: bold;
 	}
-
+	
 	.filter{
 		display: flex;
 		column-gap: 10px;
-
 		.el-button+.el-button {
 			margin-left: 0;
 		}
 	}
 
 	.car-list{
-		width: 1200px;
+		width: 1160px;
 		padding: 20px;
 		background-color: $scbgColor;
 		border-radius: 10px;
 
+		.action-btn-group{
+			display: flex;
+		}
+	}
+
+	.delete-modal{
+		padding: 20px;
+		height: 100%;
+		position: relative;
+
+		.delete-text{
+			font-size: 16px;
+		}
+		
+		.delete-btn-group{
+			width: 100%;
+			padding: 0 20px;
+			display: flex;
+			position: absolute;
+			bottom: 20px;
+			left: 50%;
+			transform: translateX(-50%);
+
+			.el-button{
+				width: 48%;
+				padding: 20px;
+			}
+		}
+		
 	}
 }
