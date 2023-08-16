@@ -1,7 +1,6 @@
 # freshcar_frontend
-```
 This is a simple car management system for front end part
-```
+
 
 ## Project setup
 ```
